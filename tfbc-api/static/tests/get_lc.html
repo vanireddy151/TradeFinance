@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+  <title>Hello, world!</title>
+</head>
+<body>
+
+
+<h2>Get the current status of an LC</h2>
+   <div>
+    <label for="name">LC #:</label>
+    <input type="text" id="lcId" name="lcId" />
+  <div>
+  <div class="button">
+    <button class="btn btn-primary" onclick="getLc()">Get Current Status of LC</button>
+    <button class="btn btn-primary" onclick="getLcHistory()">Get LC History</button>
+    <button class="btn btn-success" onclick="issueLC()">Issue LC</button>
+  </div>
+
+
+
+
+<!-- <p id="amount">Amount: </p>
+<p id="bank">Bank: </p>
+<p id="buyer">Buyer: </p>
+<p id="seller">Seller: </p>
+<p id="expiryDate">ExpiryDate: </p>
+<p id="status">Status: </p>
+
+<p></p> -->
+<p></p>
+
+<p id="demo"></p>
+
+<script>
+
+
+
+function getLc() {
+  	var xmlhttp, txt = "";
+  	xmlhttp = new XMLHttpRequest();
+ 	xmlhttp.open("POST", "http://localhost:3000/tfbc/getLC", true);
+  	xmlhttp.setRequestHeader("Content-type", "application/json");
+	xmlhttp.setRequestHeader("accept", "application/json");
+	xmlhttp.onreadystatechange = function()
+	{
+		if (this.readyState == 4 && this.status == 200)
+		{
+
+			//response will be in the
+			resp = JSON.parse(this.response);
+			// document.getElementById("status").innerHTML += "<b>"+resp['data'].status+"</b>";
+			// document.getElementById("amount").innerHTML += resp['data'].amount;
+			// document.getElementById("bank").innerHTML += resp['data'].bank;
+			// document.getElementById("buyer").innerHTML += resp['data'].buyer;
+			// document.getElementById("seller").innerHTML += resp['data'].seller;
+			// document.getElementById("expiryDate").innerHTML += resp['data'].expiryDate;
+			// document.getElementById("lcId").innerHTML += resp['data'].lcId;
+
+      console.log(resp['data'])
+      txt += "<table class='table'><thead><tr><th scope='col'>Field</th><th scope='col'>Info</th></tr></thead><tbody>"
+        txt += "<tr><td>Status: </td><td><b>"+resp['data'].status+"</b></td></tr>"
+        txt += "<tr><td>Amount: </td><td>"+resp['data'].amount+"</td></tr>"
+        txt += "<tr><td>Bank: </td><td>"+resp['data'].bank+"</td></tr>"
+        txt += "<tr><td>Buyer: </td><td>"+resp['data'].buyer+"</td></tr>"
+        txt += "<tr><td>Seller: </td><td>"+resp['data'].seller+"</td></tr>"
+        txt += "<tr><td>ExpiryDate: </td><td>"+resp['data'].expiryDate+"</td></tr>"
+      txt += "</tbody></table>"
+      document.getElementById("demo").innerHTML = txt;
+		}
+	};
+
+	var lcid_value=document.getElementById("lcId").value;
+	obj = { 'lcId': lcid_value  };
+  	params = JSON.stringify(obj);
+	xmlhttp.send(params);
+
+
+}
+function getLcHistory() {
+  	var xmlhttp, txt = "";
+  	xmlhttp = new XMLHttpRequest();
+ 	xmlhttp.open("POST", "http://localhost:3000/tfbc/getLCHistory", true);
+  	xmlhttp.setRequestHeader("Content-type", "application/json");
+	xmlhttp.setRequestHeader("accept", "application/json");
+	xmlhttp.onreadystatechange = function()
+	{
+		if (this.readyState == 4 && this.status == 200)
+		{
+
+			//response will be in the
+			resp = JSON.parse(this.response);
+			// document.getElementById("status").innerHTML += "<b>"+resp['data'].status+"</b>";
+			// document.getElementById("amount").innerHTML += resp['data'].amount;
+			// document.getElementById("bank").innerHTML += resp['data'].bank;
+			// document.getElementById("buyer").innerHTML += resp['data'].buyer;
+			// document.getElementById("seller").innerHTML += resp['data'].seller;
+			// document.getElementById("expiryDate").innerHTML += resp['data'].expiryDate;
+			// document.getElementById("lcId").innerHTML += resp['data'].lcId;
+
+      console.log(resp['data'])
+      txt += "<table class='table'><thead><tr><th scope='col'>Field</th><th scope='col'>Info</th></tr></thead><tbody>"
+      for(i=0;i<resp.data.length;i++){
+        console.log(resp.data[i].Value.status)
+        console.log(resp.data[i].Value)
+        txt += "<tr><td>Status: </td><td><b>"+resp.data[i].Value.status+"</b></td></tr>"
+        txt += "<tr><td>Amount: </td><td>"+resp.data[i].Value.amount+"</td></tr>"
+        txt += "<tr><td>Bank: </td><td>"+resp.data[i].Value.bank+"</td></tr>"
+        txt += "<tr><td>Buyer: </td><td>"+resp.data[i].Value.buyer+"</td></tr>"
+        txt += "<tr><td>Seller: </td><td>"+resp.data[i].Value.seller+"</td></tr>"
+        txt += "<tr><td>ExpiryDate: </td><td>"+resp.data[i].Value.expiryDate+"</td></tr>"
+      }
+      txt += "</tbody></table>"
+      document.getElementById("demo").innerHTML = txt;
+		}
+	};
+
+	var lcid_value=document.getElementById("lcId").value;
+	obj = { 'lcId': lcid_value  };
+  	params = JSON.stringify(obj);
+	xmlhttp.send(params);
+
+
+}
+function issueLC() {
+  	var xmlhttp, txt = "";
+  	xmlhttp = new XMLHttpRequest();
+ 	xmlhttp.open("POST", "http://localhost:3000/tfbc/issueLC", true);
+  	xmlhttp.setRequestHeader("Content-type", "application/json");
+	xmlhttp.setRequestHeader("accept", "application/json");
+	xmlhttp.onreadystatechange = function()
+	{
+		if (this.readyState == 4 && this.status == 200)
+		{
+			  //response will be in the
+			  resp = JSON.parse(this.response);
+        if(resp['code']=='200'){
+          console.log(resp['message'])
+          txt += "<span class='badge badge-pill badge-success'>Success</span>"
+          txt += "<p style='font-size:160%;'>"+" "+resp['message']+"</p>"
+		    } else {
+          console.log(resp)
+          txt += "<span class='badge badge-pill badge-danger'>Failed</span>"
+          txt += "<p style='font-size:160%;'>"+" "+resp['message']+"</p>"
+        }
+
+        document.getElementById("demo").innerHTML = txt;
+    }
+	};
+
+	var lcid_value=document.getElementById("lcId").value;
+	obj = { 'lcId': lcid_value  };
+  	params = JSON.stringify(obj);
+	xmlhttp.send(params);
+
+
+}
+</script>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
